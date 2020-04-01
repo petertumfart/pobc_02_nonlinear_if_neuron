@@ -19,7 +19,7 @@ R_m = 0.02 * Gohm
 tau_m = 20 * ms
 
 I_rh = (theta_rh - E_L - delta_T) / R_m
-
+#I_rh = 0 * pA
 
 u = np.arange(-100, -40, 0.1) * mV
 du_dt = 1/tau_m * (-u + E_L + delta_T * np.exp((u-theta_rh)/delta_T) + R_m * I_rh)
@@ -62,8 +62,8 @@ t_ref = 5 * ms
 u_0 = np.array([theta_rh/mV - 1, theta_rh/mV + 1, theta_rh/mV + 0.1]) * mV
 
 # I = 0 and u0 = El:
-u_0 = np.array([E_L/mV - 1, E_L/mV + 1, E_L/mV + 0.1]) * mV
-I_rh = 0 * pA
+#u_0 = np.array([E_L/mV - 1, E_L/mV + 1, E_L/mV + 0.1]) * mV
+#I_rh = 0 * pA
 
 # Create neurongroup:
 neuron = NeuronGroup(3, eqs, threshold='u >= u_thresh', 
@@ -82,7 +82,7 @@ net.add([neuron,state_mon,spike_mon])
 
 # Set simulation time and run the model:
 #defaultclock.dt = 0.01*ms
-t_sim = 500 * ms
+t_sim = 500* ms
 net.run(t_sim)
 
 # Store the values:
@@ -101,7 +101,7 @@ if (TASK == 'b'):
     plt.grid(b=True)
     plt.ylabel('$u$ / mV')
     plt.xlabel('$t$ / ms')
-    plt.title('Trace of different initial conditions')
+    plt.title('Behaviour of the neuron with different initial conditions')
     plt.savefig('simulations.pdf', format='pdf')
 
 elif (TASK == 'c'):
@@ -110,11 +110,12 @@ elif (TASK == 'c'):
     plt.plot(t_ / ms, u_[0] / mV, label=r'$u_0$ = {}mV + noise'.format(u_0[0]/mV))
     plt.plot(t_ / ms, u_[1] / mV, label=r'$u_0$ = {}mV + noise'.format(u_0[1]/mV))
     plt.plot(t_ / ms, u_[2] / mV, label=r'$u_0$ = {}mV + noise'.format(u_0[2]/mV))
-    plt.legend(loc='best')
+    plt.legend(loc=4)
+    #plt.legend(bbox_to_anchor=(1.06, 1), ncol=1, handlelength=1)
     plt.grid(b=True)
     plt.ylabel('$u$ / mV')
     plt.xlabel('$t$ / ms')
     plt.title('Traces of different initial conditions with noise')
-    plt.savefig('simulations_noise.pdf', format='pdf')
+    plt.savefig('simulations_noise.pdf', format='pdf')#, bbox_inches='tight')
 
 #plt.show() # avoid having multiple plt.show()s in your code
